@@ -8,7 +8,6 @@
     - appDir : Animals_app
     - repo: Animals_Management
     - account: baptisteivol
-    - ip: var=ansible_ssh_host
 
 
   tasks:
@@ -39,7 +38,7 @@
  
   - name: Copy Nginx Config File
     template:
-      src: ansible/conf.cfg
+      src: conf.cfg
       dest: /etc/nginx/sites-enabled/default
   
   - name: restart nginx
