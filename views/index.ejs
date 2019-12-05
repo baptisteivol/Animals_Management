@@ -1,0 +1,32 @@
+<%- include('partials/header') %>
+    <div class="table-wrapper">
+        <% if (animals.length > 0) {%>
+            <table class="table table-hovered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Favorite Color</th>
+                        <th scope="col">Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% animals.forEach((animals, index) => { %>
+                        <tr>
+			    <th scope="row"><%= animals.name %></th>				
+                            <td><%= animals.favorite_color %></td>
+                            <td><%= animals.type %></td>
+                            <td>
+                                <a href="/edit/<%= animals.name %>" target="_blank" rel="noopener" class="btn btn-sm btn-success">Edit</a>
+                                <a href="/delete/<%= animals.name %>" class="btn btn-sm btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p class="text-center">No animals found. Go <a href="/add" >here</a> to add animals.</p>
+        <% } %>
+    </div>
+</div>
+</body>
+</html>
