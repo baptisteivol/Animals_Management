@@ -1,0 +1,57 @@
+---
+- hosts: app
+  become: yes
+
+
+  vars:
+    - homeDir: /var/www/
+    - appDir : Animals_app
+    - repo: Animals_Management
+    - account: baptisteivol
+    - ip: var=ansible_ssh_host
+
+
+  tasks:
+  - name: Install Packages
+    apt: name={{ item }} update_cache=yes state=latest
+    with_items:
+      - build-essential
+      - git
+      - mcrypt
+      - nginx
+      - curl
+      - nodejs
+
+  - name: Install pm2
+    npm: name=pm2 global=yes production=yes
+
+  - name: Create APP Directory
+    file: path={{homeDir}}/{{appDir}} state=directory
+
+  - name: Git Clone Repo
+    git: repo=https://github.com/{{account}}/{{repo}}.git dest={{homeDir}}/{{appDir}} update=yes force=yes accept_hostkey=yes key_file={{homeDir}}/bivol
+    register: git_finished
+
+  - name: Running NPM install
+    npm: path={{homeDir}}/{{appDir}}
+    register: npm_finished
+    when: git_finished.changed
+ 
+  - name: Copy Nginx Config File
+    template:
+      src: ansible/conf.cfg
+      dest: /etc/nginx/sites-enabled/default
+  
+  - name: restart nginx
+    service:
+      name: nginx
+      state: restarted
+
+  - name: Stop APP
+    command: pm2 stop {{homeDir}}/{{appDir}}/app.js
+    ignore_errors: yes
+
+  - name: Start APP
+    command: pm2 start {{homeDir}}/{{appDir}}/app.js --name app
+    ignore_errors: yes
+    when: npm_finished
