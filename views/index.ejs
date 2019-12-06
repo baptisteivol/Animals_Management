@@ -16,6 +16,7 @@
                             <td><%= animals.favorite_color %></td>
                             <td><%= animals.type %></td>
                             <td>
+                                <a href="/edit/<%= animals.name %>" target="_blank" rel="noopener" class="btn btn-sm btn-success">Edit</a>
                                 <a href="/delete/<%= animals.name %>" class="btn btn-sm btn-danger">Delete</a>
                             </td>
                         </tr>
