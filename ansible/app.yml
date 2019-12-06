@@ -85,16 +85,16 @@
       src: conf.cfg
       dest: /etc/nginx/sites-enabled/default
   
-  - name: restart nginx
+  - name: Restart nginx
     service:
       name: nginx
       state: restarted
 
-  - name: Stop APP
+  - name: Stop app.js
     command: pm2 stop {{homeDir}}{{appDir}}/app.js
     ignore_errors: yes
 
-  - name: Start APP
+  - name: Start app.js
     command: pm2 start {{homeDir}}{{appDir}}/app.js --name app
     ignore_errors: yes
     when: npm_finished
