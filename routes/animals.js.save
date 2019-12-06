@@ -8,9 +8,6 @@ module.exports = {
         });
     },
     addAnimal: (req, res) => {
-        if (!req.files) {
-            return res.status(400).send("No files were uploaded.");
-        }
 
         let message = '';
         let name = req.body.name;
@@ -47,7 +44,7 @@ module.exports = {
     },
     editAnimalPage: (req, res) => {
         let animalName = req.params.name;
-        let query = "SELECT * FROM `animals` WHERE name = '" + name + "' ";
+        let query = "SELECT * FROM `animals` WHERE name = '" + animalName + "' ";
         db.query(query, (err, result) => {
             if (err) {
                 return res.status(500).send(err);
@@ -61,10 +58,10 @@ module.exports = {
     },
     editAnimal: (req, res) => {
         let animalName = req.params.name;
-        let favorite_animal = req.body.favorite_animal;
+        let favorite_color = req.body.favorite_color;
         let type = req.body.type;
 
-        let query = "UPDATE `animals` SET `name` = '" + name + "', `favorite_animal` = '" + favorite_animal + "', `type` = '" + type + "'";
+        let query = "UPDATE `animals` SET `name` = '" + animalName + "', `favorite_color` = '" + favorite_color + "', `type` = '" + type + "'";
         db.query(query, (err, result) => {
             if (err) {
                 return res.status(500).send(err);
@@ -76,24 +73,11 @@ module.exports = {
         let animalName = req.params.name;
         let deleteUserQuery = 'DELETE FROM animals WHERE name = "' + animalName + '"';
 
-        db.query(getImageQuery, (err, result) => {
-            if (err) {
+        db.query(deleteUserQuery, (err, result) => {
+      	     if (err) {
                 return res.status(500).send(err);
-            }
-
-            let image = result[0].image;
-
-            fs.unlink(`public/assets/img/${image}`, (err) => {
-                if (err) {
-                    return res.status(500).send(err);
-                }
-                db.query(deleteUserQuery, (err, result) => {
-                    if (err) {
-                        return res.status(500).send(err);
-                    }
-                    res.redirect('/');
-                });
-            });
+             }
+             res.redirect('/');
         });
     }
 };
