@@ -53,7 +53,13 @@
       password: "password"
       priv: '*.*:ALL,GRANT'
       check_implicit_admin: true
-   
+  
+  - name: set password
+    mysql_user:
+      name: root
+      password: password
+      login_unix_socket: /var/run/mysqld/mysqld.sock
+ 
   - name: Create a new database with name
     mysql_db:
       name: favorite_animals
