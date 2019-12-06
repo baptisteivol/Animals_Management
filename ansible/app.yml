@@ -54,7 +54,7 @@
       priv: '*.*:ALL,GRANT'
       check_implicit_admin: true
    
-  - name: Create a new database with name
+  - name: Create a new database
     mysql_db:
       name: favorite_animals
       login_user: root
