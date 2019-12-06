@@ -36,10 +36,34 @@ module.exports = {
                             }
                             res.redirect('/');
                         });
-                   // }); 
-	//	}
-//                }
             }
+        });
+    },
+    editAnimalPage: (req, res) => {
+        let animalName = req.params.name;
+        let query = "SELECT * FROM `animals` WHERE name = '" + animalName + "' ";
+        db.query(query, (err, result) => {
+            if (err) {
+                return res.status(500).send(err);
+            }
+            res.render('edit-animals.ejs', {
+                title: "Edit  Animals"
+                ,animal: result[0]
+                ,message: ''
+            });
+        });
+    },
+    editAnimal: (req, res) => {
+        let animalName = req.params.name;
+        let favorite_color = req.body.favorite_color;
+        let type = req.body.type;
+
+        let query = "UPDATE `animals` SET `name` = '" + animalName + "', `favorite_color` = '" + favorite_color + "', `type` = '" + type + "'";
+        db.query(query, (err, result) => {
+            if (err) {
+                return res.status(500).send(err);
+            }
+            res.redirect('/');
         });
     },
     deleteAnimal: (req, res) => {
