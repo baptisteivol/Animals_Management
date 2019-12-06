@@ -58,7 +58,7 @@ module.exports = {
         let favorite_color = req.body.favorite_color;
         let type = req.body.type;
 
-        let query = "UPDATE `animals` SET `name` = '" + animalName + "', `favorite_color` = '" + favorite_color + "', `type` = '" + type + "'";
+        let query = "UPDATE `animals` SET `name` = '" + animalName + "', `favorite_color` = '" + favorite_color + "', `type` = '" + type + "' WHERE `animals`.`name` = '" + animalName + "'";
         db.query(query, (err, result) => {
             if (err) {
                 return res.status(500).send(err);
