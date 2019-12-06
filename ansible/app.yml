@@ -20,6 +20,8 @@
       - nginx
       - curl
       - nodejs
+      - mysql-server
+      - python-mysqldb
 
   - name: Install pm2
     npm: name=pm2 global=yes production=yes
@@ -31,6 +33,27 @@
     git: repo=https://github.com/{{account}}/{{repo}}.git dest={{homeDir}}/{{appDir}} update=yes force=yes accept_hostkey=yes key_file={{homeDir}}/bivol
     register: git_finished
 
+  - name: Start the MySQL service
+    service: 
+      name: mysql 
+      state: started
+      enabled: true
+ 
+  - name: Create a new database with name
+    mysql_db:
+      name: favorite_animals
+      login_user: root 
+      login_password: password
+      state: present
+ 
+  - name: Create table
+    mysql_db: 
+      name: favorite_animals
+      login_user: root
+      login_password: password 
+      state: import
+      target: {{homeDir}}/{{appDir}}/ansible/schema_bd.sql
+  
   - name: Running NPM install
     npm: path={{homeDir}}/{{appDir}}
     register: npm_finished
